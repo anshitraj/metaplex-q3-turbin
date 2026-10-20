@@ -1,0 +1,33 @@
+[package]
+name = "core-nft-staking"
+version = "0.1.0"
+description = "NFT staking on Metaplex Core: freeze + burn delegates, collection attributes, time-gated transfers via Oracle plugin"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "core_nft_staking"
+
+[features]
+default = []
+cpi = ["no-entrypoint"]
+no-entrypoint = []
+no-idl = []
+no-log-ix-name = []
+idl-build = ["anchor-lang/idl-build", "anchor-spl/idl-build"]
+
+[dependencies]
+anchor-lang = { version = "1.2.0", features = ["init-if-needed"] }
+anchor-spl = "1.2.0"
+# mpl-core's optional `anchor` feature targets anchor-lang 0.31/0.32, so use the
+# default features and talk to MPL Core only through its generated CPI builders.
+mpl-core = "0.12.1"
+
+[dev-dependencies]
+litesvm = "0.10.0"
+solana-address = "2"
+solana-clock = "3"
+solana-keypair = "3"
+solana-message = "3"
+solana-signer = "3"
+solana-transaction = "3"

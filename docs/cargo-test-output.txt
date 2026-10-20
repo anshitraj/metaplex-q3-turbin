@@ -1,0 +1,75 @@
+# cargo test   (2026-10-20T18:34:50Z)
+# rustc 1.92.0 (ded5c06cf 2025-12-08) | solana-cli 4.2.0 | anchor-lang 1.2 | litesvm 0.10 | mpl-core 0.12.1
+
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2m 00s
+     Running unittests src\lib.rs (target\debug\deps\core_nft_staking-355fde6306478595.exe)
+
+running 3 tests
+test state::oracle::tests::seconds_since_boundary_counts_from_the_latest_open_or_close ... ok
+test state::oracle::tests::verdict_flips_exactly_on_the_boundaries ... ok
+test state::oracle::tests::verdict_repeats_every_day_and_handles_pre_epoch_timestamps ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\oracle.rs (target\debug\deps\oracle-4ba1eb8f3522196a.exe)
+
+running 19 tests
+test the_vault_keeps_its_rent_reserve_and_pays_what_it_can ... ok
+test the_oracle_adapter_is_attached_to_the_collection_and_funded ... ok
+test the_oracle_works_with_an_unfunded_vault ... ok
+test the_cranker_is_paid_when_the_crank_lands_right_after_the_boundary ... ok
+test a_crank_just_after_midnight_is_not_near_any_boundary ... ok
+test the_oracle_cannot_be_set_up_twice ... ok
+test only_the_admin_can_set_up_the_oracle ... ok
+test transfers_are_blocked_while_the_oracle_says_rejected ... ok
+test a_crank_that_changes_nothing_earns_nothing ... ok
+test anyone_can_top_up_the_vault_with_a_plain_sol_transfer ... ok
+test the_window_repeats_every_day ... ok
+test a_late_crank_still_fixes_the_oracle_but_earns_nothing ... ok
+test only_transfers_are_policed_staking_and_burning_work_at_night ... ok
+test cranking_after_the_open_lets_transfers_through ... ok
+test the_verdict_is_only_as_fresh_as_the_last_crank ... ok
+test cranking_after_the_close_blocks_transfers_again ... ok
+test bypassing_our_program_does_not_bypass_the_oracle ... ok
+test a_staked_nft_stays_frozen_even_while_the_window_is_open ... ok
+test the_crank_window_must_be_sane ... ok
+
+test result: ok. 19 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.07s
+
+     Running tests\staking.rs (target\debug\deps\staking-743f6ca3b89d4cf8.exe)
+
+running 25 tests
+test only_the_program_can_touch_the_collection_counter ... ok
+test initialize_config_puts_total_staked_attribute_on_the_collection ... ok
+test initialize_config_fails_if_the_collection_already_has_an_attributes_plugin ... ok
+test initialize_config_rejects_anyone_but_the_collection_authority ... ok
+test stake_rejects_a_fake_asset_account ... ok
+test stake_rejects_assets_from_another_collection ... ok
+test stake_freezes_the_nft_and_increments_total_staked ... ok
+test stake_rejects_assets_the_signer_does_not_own ... ok
+test claim_rewards_only_pays_for_the_time_since_the_last_claim ... ok
+test an_nft_cannot_be_staked_twice ... ok
+test burn_staked_nft_destroys_the_asset_and_mints_rewards_plus_bonus ... ok
+test burn_staked_nft_does_not_wait_for_the_freeze_period ... ok
+test claim_rewards_is_owner_only ... ok
+test claim_rewards_mints_to_the_ata_and_keeps_the_nft_staked_and_frozen ... ok
+test burn_staked_nft_is_owner_only ... ok
+test a_staked_nft_cannot_be_moved_thawed_or_stripped_by_its_owner ... ok
+test an_unstaked_nft_can_be_staked_again ... ok
+test an_unstaked_nft_has_no_burn_delegate_to_abuse ... ok
+test control_the_same_core_instructions_succeed_when_the_owner_is_the_authority ... ok
+test stake_respects_max_stake ... ok
+test unstake_is_blocked_until_the_freeze_period_has_passed ... ok
+test unstake_after_a_claim_pays_only_the_remainder ... ok
+test unstake_is_owner_only ... ok
+test unstake_thaws_pays_out_and_hands_the_nft_back_clean ... ok
+test total_staked_tracks_every_path_across_users ... ok
+
+test result: ok. 25 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.26s
+
+   Doc-tests core_nft_staking
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

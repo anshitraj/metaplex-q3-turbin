@@ -1,0 +1,1547 @@
+{
+  "address": "EMKQYHrTWbHr245UYkesW6n4menbJoUKWPkKvSPMeF4i",
+  "metadata": {
+    "name": "core_nft_staking",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "NFT staking on Metaplex Core: freeze + burn delegates, collection attributes, time-gated transfers via Oracle plugin"
+  },
+  "instructions": [
+    {
+      "name": "burn_staked_nft",
+      "docs": [
+        "Burn-to-earn: burns the staked NFT through its BurnDelegate and mints the",
+        "accrued rewards plus a one-time bonus."
+      ],
+      "discriminator": [
+        218,
+        19,
+        0,
+        8,
+        188,
+        214,
+        133,
+        38
+      ],
+      "accounts": [
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "asset",
+          "writable": true
+        },
+        {
+          "name": "collection",
+          "writable": true
+        },
+        {
+          "name": "config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "collection"
+              }
+            ]
+          }
+        },
+        {
+          "name": "stake_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  116,
+                  97,
+                  107,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "asset"
+              },
+              {
+                "kind": "account",
+                "path": "config"
+              }
+            ]
+          }
+        },
+        {
+          "name": "user_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  115,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "config"
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              }
+            ]
+          }
+        },
+        {
+          "name": "rewards_mint",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  101,
+                  119,
+                  97,
+                  114,
+                  100,
+                  115
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "config"
+              }
+            ]
+          }
+        },
+        {
+          "name": "rewards_ata",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "user"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "rewards_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "mpl_core_program",
+          "address": "CoREENxT6tW1HoK8ypY1SxRMZTcVPm7R94rH4PZNhX7d"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "claim_rewards",
+      "docs": [
+        "Mints the rewards accrued so far to the user's ATA; the NFT stays",
+        "staked and frozen."
+      ],
+      "discriminator": [
+        4,
+        144,
+        132,
+        71,
+        116,
+        23,
+        151,
+        80
+      ],
+      "accounts": [
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "asset"
+        },
+        {
+          "name": "config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "config.collection",
+                "account": "StakeConfig"
+              }
+            ]
+          }
+        },
+        {
+          "name": "stake_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  116,
+                  97,
+                  107,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "asset"
+              },
+              {
+                "kind": "account",
+                "path": "config"
+              }
+            ]
+          }
+        },
+        {
+          "name": "rewards_mint",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  101,
+                  119,
+                  97,
+                  114,
+                  100,
+                  115
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "config"
+              }
+            ]
+          }
+        },
+        {
+          "name": "rewards_ata",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "user"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "rewards_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "initialize_config",
+      "docs": [
+        "Creates a staking pool for an existing Core collection and puts the",
+        "`total_staked` Attribute on that collection."
+      ],
+      "discriminator": [
+        208,
+        127,
+        21,
+        1,
+        194,
+        190,
+        196,
+        70
+      ],
+      "accounts": [
+        {
+          "name": "admin",
+          "docs": [
+            "Must be the update authority of the collection."
+          ],
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "collection",
+          "docs": [
+            "`update_authority == admin`)."
+          ],
+          "writable": true
+        },
+        {
+          "name": "config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "collection"
+              }
+            ]
+          }
+        },
+        {
+          "name": "rewards_mint",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  101,
+                  119,
+                  97,
+                  114,
+                  100,
+                  115
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "config"
+              }
+            ]
+          }
+        },
+        {
+          "name": "mpl_core_program",
+          "address": "CoREENxT6tW1HoK8ypY1SxRMZTcVPm7R94rH4PZNhX7d"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        }
+      ],
+      "args": [
+        {
+          "name": "reward_per_second",
+          "type": "u64"
+        },
+        {
+          "name": "burn_bonus",
+          "type": "u64"
+        },
+        {
+          "name": "freeze_period",
+          "type": "i64"
+        },
+        {
+          "name": "max_stake",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "initialize_oracle",
+      "discriminator": [
+        144,
+        223,
+        131,
+        120,
+        196,
+        253,
+        181,
+        99
+      ],
+      "accounts": [
+        {
+          "name": "admin",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "collection"
+              }
+            ]
+          }
+        },
+        {
+          "name": "collection",
+          "docs": [
+            "requires `admin` to be the collection's update authority."
+          ],
+          "writable": true
+        },
+        {
+          "name": "oracle",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  111,
+                  114,
+                  97,
+                  99,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "config"
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault",
+          "docs": [
+            "Holds the lamports that reward crankers. A system-owned PDA, so the program",
+            "can pay out of it with a signed `system_program::transfer`."
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "config"
+              }
+            ]
+          }
+        },
+        {
+          "name": "mpl_core_program",
+          "address": "CoREENxT6tW1HoK8ypY1SxRMZTcVPm7R94rH4PZNhX7d"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "crank_reward",
+          "type": "u64"
+        },
+        {
+          "name": "crank_window",
+          "type": "i64"
+        },
+        {
+          "name": "vault_funding",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "initialize_user",
+      "discriminator": [
+        111,
+        17,
+        185,
+        250,
+        60,
+        122,
+        38,
+        254
+      ],
+      "accounts": [
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "config.collection",
+                "account": "StakeConfig"
+              }
+            ]
+          }
+        },
+        {
+          "name": "user_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  115,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "config"
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "stake",
+      "docs": [
+        "Freezes the NFT in the owner's wallet (FreezeDelegate), installs a",
+        "BurnDelegate, and increments the collection's `total_staked`."
+      ],
+      "discriminator": [
+        206,
+        176,
+        202,
+        18,
+        200,
+        209,
+        179,
+        108
+      ],
+      "accounts": [
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "asset",
+          "docs": [
+            "`user`, member of the staking collection)."
+          ],
+          "writable": true
+        },
+        {
+          "name": "collection",
+          "docs": [
+            "collection. MPL Core validates the account itself."
+          ],
+          "writable": true
+        },
+        {
+          "name": "config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "collection"
+              }
+            ]
+          }
+        },
+        {
+          "name": "stake_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  116,
+                  97,
+                  107,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "asset"
+              },
+              {
+                "kind": "account",
+                "path": "config"
+              }
+            ]
+          }
+        },
+        {
+          "name": "user_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  115,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "config"
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              }
+            ]
+          }
+        },
+        {
+          "name": "mpl_core_program",
+          "address": "CoREENxT6tW1HoK8ypY1SxRMZTcVPm7R94rH4PZNhX7d"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "transfer_nft",
+      "discriminator": [
+        190,
+        28,
+        194,
+        8,
+        194,
+        218,
+        78,
+        78
+      ],
+      "accounts": [
+        {
+          "name": "owner",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "new_owner"
+        },
+        {
+          "name": "asset",
+          "writable": true
+        },
+        {
+          "name": "collection",
+          "writable": true
+        },
+        {
+          "name": "config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "collection"
+              }
+            ]
+          }
+        },
+        {
+          "name": "oracle",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  111,
+                  114,
+                  97,
+                  99,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "config"
+              }
+            ]
+          }
+        },
+        {
+          "name": "mpl_core_program",
+          "address": "CoREENxT6tW1HoK8ypY1SxRMZTcVPm7R94rH4PZNhX7d"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "unstake",
+      "docs": [
+        "Thaws the NFT, removes the delegates, pays out the accrued rewards and",
+        "decrements `total_staked`."
+      ],
+      "discriminator": [
+        90,
+        95,
+        107,
+        42,
+        205,
+        124,
+        50,
+        225
+      ],
+      "accounts": [
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "asset",
+          "writable": true
+        },
+        {
+          "name": "collection",
+          "writable": true
+        },
+        {
+          "name": "config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "collection"
+              }
+            ]
+          }
+        },
+        {
+          "name": "stake_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  116,
+                  97,
+                  107,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "asset"
+              },
+              {
+                "kind": "account",
+                "path": "config"
+              }
+            ]
+          }
+        },
+        {
+          "name": "user_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  115,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "config"
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              }
+            ]
+          }
+        },
+        {
+          "name": "rewards_mint",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  101,
+                  119,
+                  97,
+                  114,
+                  100,
+                  115
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "config"
+              }
+            ]
+          }
+        },
+        {
+          "name": "rewards_ata",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "user"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "rewards_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "mpl_core_program",
+          "address": "CoREENxT6tW1HoK8ypY1SxRMZTcVPm7R94rH4PZNhX7d"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "update_oracle",
+      "docs": [
+        "Permissionless crank that syncs the Oracle with the transfer window."
+      ],
+      "discriminator": [
+        112,
+        41,
+        209,
+        18,
+        248,
+        226,
+        252,
+        188
+      ],
+      "accounts": [
+        {
+          "name": "cranker",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "config.collection",
+                "account": "StakeConfig"
+              }
+            ]
+          }
+        },
+        {
+          "name": "oracle",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  111,
+                  114,
+                  97,
+                  99,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "config"
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "config"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    }
+  ],
+  "accounts": [
+    {
+      "name": "Oracle",
+      "discriminator": [
+        139,
+        194,
+        131,
+        179,
+        140,
+        179,
+        229,
+        244
+      ]
+    },
+    {
+      "name": "StakeAccount",
+      "discriminator": [
+        80,
+        158,
+        67,
+        124,
+        50,
+        189,
+        192,
+        255
+      ]
+    },
+    {
+      "name": "StakeConfig",
+      "discriminator": [
+        238,
+        151,
+        43,
+        3,
+        11,
+        151,
+        63,
+        176
+      ]
+    },
+    {
+      "name": "UserAccount",
+      "discriminator": [
+        211,
+        33,
+        136,
+        16,
+        186,
+        110,
+        242,
+        127
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "FreezePeriodNotPassed",
+      "msg": "Freeze period has not passed yet"
+    },
+    {
+      "code": 6001,
+      "name": "MaxStakeReached",
+      "msg": "Maximum number of staked NFTs reached"
+    },
+    {
+      "code": 6002,
+      "name": "InvalidAsset",
+      "msg": "Account is not a valid MPL Core asset"
+    },
+    {
+      "code": 6003,
+      "name": "InvalidCollection",
+      "msg": "Account is not a valid MPL Core collection"
+    },
+    {
+      "code": 6004,
+      "name": "NotAssetOwner",
+      "msg": "Signer does not own this asset"
+    },
+    {
+      "code": 6005,
+      "name": "WrongCollection",
+      "msg": "Asset does not belong to the staking collection"
+    },
+    {
+      "code": 6006,
+      "name": "NotCollectionAuthority",
+      "msg": "Signer is not the update authority of the collection"
+    },
+    {
+      "code": 6007,
+      "name": "NothingToClaim",
+      "msg": "There are no rewards to claim yet"
+    },
+    {
+      "code": 6008,
+      "name": "MathOverflow",
+      "msg": "Arithmetic overflow"
+    },
+    {
+      "code": 6009,
+      "name": "InvalidStakeCounter",
+      "msg": "Collection has no valid `total_staked` attribute"
+    },
+    {
+      "code": 6010,
+      "name": "InvalidCrankWindow",
+      "msg": "Crank window must be between 1 and MAX_CRANK_WINDOW_SECONDS"
+    }
+  ],
+  "types": [
+    {
+      "name": "Oracle",
+      "docs": [
+        "Static (PDA) Oracle account read by MPL Core on every `Transfer` of an",
+        "asset in the collection.",
+        "",
+        "NOTE: `validation` MUST stay the first field."
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "validation",
+            "type": {
+              "defined": {
+                "name": "OracleValidation"
+              }
+            }
+          },
+          {
+            "name": "crank_reward",
+            "docs": [
+              "Lamports paid out of the vault to whoever cranks at the right time."
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "crank_window",
+            "docs": [
+              "A crank is only paid if it lands within this many seconds after a",
+              "window boundary (open / close)."
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "last_updated",
+            "type": "i64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "vault_bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "OracleResult",
+      "docs": [
+        "Mirrors `mpl_core::types::ExternalValidationResult` (same Borsh layout)."
+      ],
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Approved"
+          },
+          {
+            "name": "Rejected"
+          },
+          {
+            "name": "Pass"
+          }
+        ]
+      }
+    },
+    {
+      "name": "OracleValidation",
+      "docs": [
+        "Mirrors `mpl_core::types::OracleValidation` (same Borsh layout). MPL Core",
+        "reads this straight out of our account data, right after the 8 byte Anchor",
+        "discriminator (`ValidationResultsOffset::Anchor`)."
+      ],
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Uninitialized"
+          },
+          {
+            "name": "V1",
+            "fields": [
+              {
+                "name": "create",
+                "type": {
+                  "defined": {
+                    "name": "OracleResult"
+                  }
+                }
+              },
+              {
+                "name": "transfer",
+                "type": {
+                  "defined": {
+                    "name": "OracleResult"
+                  }
+                }
+              },
+              {
+                "name": "burn",
+                "type": {
+                  "defined": {
+                    "name": "OracleResult"
+                  }
+                }
+              },
+              {
+                "name": "update",
+                "type": {
+                  "defined": {
+                    "name": "OracleResult"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "StakeAccount",
+      "docs": [
+        "Per-asset stake record. This PDA is also the *plugin authority* of the",
+        "asset's `FreezeDelegate` and `BurnDelegate` plugins, so the program (and only",
+        "the program) can thaw / burn the asset."
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "asset",
+            "type": "pubkey"
+          },
+          {
+            "name": "staked_at",
+            "type": "i64"
+          },
+          {
+            "name": "last_claim_at",
+            "docs": [
+              "Rewards accrue from here; moved forward by `claim_rewards`."
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "StakeConfig",
+      "docs": [
+        "One staking pool, bound to exactly one MPL Core collection."
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "admin",
+            "docs": [
+              "Collection admin: creates the pool and the oracle."
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "collection",
+            "docs": [
+              "The MPL Core collection whose assets can be staked."
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "reward_per_second",
+            "docs": [
+              "Reward tokens (base units) accrued per staked NFT per second."
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "burn_bonus",
+            "docs": [
+              "One-time reward tokens (base units) paid on top of accrued rewards when",
+              "a staked NFT is burned."
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "freeze_period",
+            "docs": [
+              "Seconds an NFT has to stay staked before it can be unstaked."
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "max_stake",
+            "docs": [
+              "Max NFTs a single user may stake at once."
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "rewards_bump",
+            "type": "u8"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UserAccount",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "amount_staked",
+            "type": "u8"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    }
+  ],
+  "constants": [
+    {
+      "name": "MAX_CRANK_WINDOW_SECONDS",
+      "type": "i64",
+      "value": "3600"
+    }
+  ]
+}

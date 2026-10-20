@@ -1,0 +1,24 @@
+# NOTE: deliberately no [toolchain] section. Anchor CLI would use it to install and
+# *switch* your global Solana / Anchor versions. Versions this was built and tested
+# with are listed in the README (Anchor 1.2, Agave 4.2, Rust 1.92).
+
+[features]
+resolution = true
+skip-lint = false
+
+[programs.localnet]
+core_nft_staking = "EMKQYHrTWbHr245UYkesW6n4menbJoUKWPkKvSPMeF4i"
+
+[programs.devnet]
+core_nft_staking = "EMKQYHrTWbHr245UYkesW6n4menbJoUKWPkKvSPMeF4i"
+
+[provider]
+cluster = "Localnet"
+wallet = "~/.config/solana/id.json"
+
+# The tests are Rust + LiteSVM (an in-process SVM that loads the real MPL Core
+# program from tests/fixtures), so no validator is needed: run
+#   anchor build && cargo test
+# rather than `anchor test`.
+[scripts]
+test = "cargo test -p core-nft-staking"
